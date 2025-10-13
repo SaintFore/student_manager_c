@@ -1,9 +1,11 @@
 // main.c
 #include "student.h"
+#include <stdlib.h>
 
 int main() {
-    struct Student student_list[10];
+    struct Student *student_list = NULL;
     int student_count = 0;
+    int capacity = 0;
     int choice;
 
     while (1) {
@@ -23,7 +25,7 @@ int main() {
         switch (choice) {
         case 1:
             // 调用添加函数
-            add_student(student_list, &student_count);
+            add_student(&student_list, &student_count, &capacity);
             break;
         case 2:
             // 调用显示函数
@@ -34,16 +36,17 @@ int main() {
             search_student(student_list, student_count);
             break;
         case 4:
-            delete_student(student_list, &student_count);
+            delete_student(&student_list, &student_count);
             break;
         case 5:
             save_to_file(student_list, student_count);
             break;
         case 6:
-            load_from_file(student_list, &student_count);
+            load_from_file(&student_list, &student_count, &capacity);
             break;
         case 0:
             printf("感谢使用，再见！\n");
+            free(student_list);
             return 0;
         default:
             printf("无效输入，请重新选择。\n");

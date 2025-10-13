@@ -10,12 +10,11 @@ struct Student {
     float score;
 };
 
-// 所有函数的原型声明
-void add_student(struct Student students[], int *count);
-void display_students(struct Student students[], int count);
-void search_student(struct Student students[], int count);
-void delete_student(struct Student students[], int *count);
-void save_to_file(struct Student students[], int count);
-void load_from_file(struct Student students[], int *count);
+void add_student(struct Student **students, int *count, int *capacity);
+void display_students(struct Student *students, int count);
+void search_student(struct Student *students, int count);
+void delete_student(struct Student **students, int *count);
+void save_to_file(struct Student *students, int count);
+void load_from_file(struct Student **students, int *count, int *capacity);
 
 #endif // STUDENT_H // Include Guard 结束

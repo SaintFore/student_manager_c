@@ -1,9 +1,22 @@
 // student.c
 #include "student.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 // 添加学生的函数
-void add_student(struct Student students[], int *count) {
+void add_student(struct Student **students, int *count, int *capacity) {
+    if (*count == *capacity) {
+        int new_capacity = (*capacity == 0) ? 1 : *capacity * 2;
+        struct Student *temp =
+            realloc(*students, new_capacity * sizeof(struct Student));
+        if (temp == NULL) {
+            return;
+        } else {
+            *students = temp;
+            *capacity = new_capacity;
+        }
+    }
     char name[50];
     int id;
     float score;
@@ -12,9 +25,9 @@ void add_student(struct Student students[], int *count) {
     // 使用 scanf 读取...
     scanf("%s %d %f", name, &id, &score);
     // 存入数组...
-    strcpy(students[*count].name, name);
-    students[*count].id = id;
-    students[*count].score = score;
+    strcpy((*students)[*count].name, name);
+    (*students)[*count].id = id;
+    (*students)[*count].score = score;
     // 别忘了增加 *count 的值！
     *count += 1;
 }
@@ -57,13 +70,13 @@ void search_student(struct Student students[], int count) {
     printf("没有这个学号\n");
 }
 
-void delete_student(struct Student students[], int *count) {
+void delete_student(struct Student **students, int *count) {
     int index_to_delete = -1;
     int id;
     printf("请输入您想要删除的学生的学号: ");
     scanf("%d", &id);
     for (int i = 0; i < *count; i++) {
-        if (id == students[i].id) {
+        if (id == (*students)[i].id) {
             index_to_delete = i;
             break;
         }
@@ -71,10 +84,10 @@ void delete_student(struct Student students[], int *count) {
     if (index_to_delete == -1) {
         printf("没有这个用户");
     } else {
-        printf("已经删除id为%d,名字为%s", students[index_to_delete].id,
-               students[index_to_delete].name);
+        printf("已经删除id为%d,名字为%s", (*students)[index_to_delete].id,
+               (*students)[index_to_delete].name);
         for (int i = index_to_delete; i < *count - 1; i++) {
-            students[i] = students[i + 1];
+            (*students)[i] = (*students)[i + 1];
         }
         (*count)--;
     }
@@ -95,72 +108,31 @@ void save_to_file(struct Student students[], int count) {
         printf("存储成功");
     }
 }
-void load_from_file(struct Student students[], int *count) {
+void load_from_file(struct Student **students, int *count, int *capacity) {
     FILE *file;
     file = fopen("student.txt", "r");
     if (file == NULL) {
+        fclose(file);
         printf("文件无法打开\n");
         return;
     } else {
-        fscanf(file, "%d\n", count);
+        fscanf(file, "%d", count);
+        *capacity = *count;
+        if (*students != NULL) {
+            free(*students);
+        }
+        struct Student *temp = malloc(*capacity * sizeof(struct Student));
+        if (temp == NULL) {
+            fclose(file);
+            return;
+        } else {
+            *students = temp;
+        }
         for (int i = 0; i < *count; i++) {
-            fscanf(file, "%s %d %f\n", students[i].name, &students[i].id,
-                   &students[i].score);
+            fscanf(file, "%s %d %f", (*students)[i].name, &(*students)[i].id,
+                   &(*students)[i].score);
         }
         fclose(file);
         printf("数据读取成功");
     }
-}
-
-int main() {
-    struct Student student_list[10];
-    int student_count = 0;
-    int choice;
-
-    while (1) {
-        printf("\n--- 学生管理系统 ---\n");
-        printf("1. 添加学生\n");
-        printf("2. 显示所有学生\n");
-        printf("3. 按学号查找学生\n");
-        printf("4. 按学号删除学生\n");
-        printf("5. 存储数据\n");
-        printf("6. 读取数据\n");
-        printf("0. 退出程序\n");
-        printf("----------\n");
-        printf("请输入你的选择: ");
-        scanf("%d", &choice);
-        printf("\n");
-
-        switch (choice) {
-        case 1:
-            // 调用添加函数
-            add_student(student_list, &student_count);
-            break;
-        case 2:
-            // 调用显示函数
-            display_students(student_list, student_count);
-            break;
-        case 3:
-            // 调用查找函数
-            search_student(student_list, student_count);
-            break;
-        case 4:
-            delete_student(student_list, &student_count);
-            break;
-        case 5:
-            save_to_file(student_list, student_count);
-            break;
-        case 6:
-            load_from_file(student_list, &student_count);
-            break;
-        case 0:
-            printf("感谢使用，再见！\n");
-            return 0;
-        default:
-            printf("无效输入，请重新选择。\n");
-            break;
-        }
-    }
-
-    return 0;
 }
