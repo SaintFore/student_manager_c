@@ -77,6 +77,7 @@ void delete_student(struct Student **students, int *count) {
     int id;
     printf("请输入您想要删除的学生的学号: ");
     /* scanf("%d", &id); */
+    id = get_integer_input();
 
     for (int i = 0; i < *count; i++) {
         if (id == (*students)[i].id) {
@@ -115,7 +116,6 @@ void load_from_file(struct Student **students, int *count, int *capacity) {
     FILE *file;
     file = fopen("student.txt", "r");
     if (file == NULL) {
-        fclose(file);
         printf("文件无法打开\n");
         return;
     } else {
