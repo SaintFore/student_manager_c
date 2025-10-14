@@ -19,7 +19,7 @@ int main() {
         printf("0. 退出程序\n");
         printf("----------\n");
         printf("请输入你的选择: ");
-        scanf("%d", &choice);
+        choice = get_integer_input();
         printf("\n");
 
         switch (choice) {

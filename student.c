@@ -1,5 +1,6 @@
 // student.c
 #include "student.h"
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -54,7 +55,8 @@ void display_students(struct Student students[], int count) {
 void search_student(struct Student students[], int count) {
     int search_id;
     printf("请输入要查找的学号: ");
-    scanf("%d", &search_id);
+    /* scanf("%d", &search_id); */
+    search_id = get_integer_input();
 
     // 在这里写一个 for 循环来查找...
     for (int i = 0; i < count; i++) {
@@ -74,7 +76,8 @@ void delete_student(struct Student **students, int *count) {
     int index_to_delete = -1;
     int id;
     printf("请输入您想要删除的学生的学号: ");
-    scanf("%d", &id);
+    /* scanf("%d", &id); */
+
     for (int i = 0; i < *count; i++) {
         if (id == (*students)[i].id) {
             index_to_delete = i;
@@ -134,5 +137,33 @@ void load_from_file(struct Student **students, int *count, int *capacity) {
         }
         fclose(file);
         printf("数据读取成功");
+    }
+}
+
+int get_integer_input() {
+    char buffer[100];
+    char *endptr;
+    long value;
+    while (1) {
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
+            printf("输入流错误，程序退出! \n");
+            exit(1);
+        }
+        value = strtol(buffer, &endptr, 10);
+        // 开头就是非数字
+        if (endptr == buffer) {
+            printf("无效输入，请重新输入! \n");
+            continue;
+        }
+        // 为指针去除数字后面的空白字符
+        while (isspace((unsigned char)*endptr)) {
+            endptr++;
+        }
+        // 如果数字后面还是非数字，还是非法的
+        if (*endptr != '\0') {
+            printf("无效输入，请重新输入! \n");
+            continue;
+        }
+        return (int)value;
     }
 }

@@ -16,5 +16,6 @@ void search_student(struct Student *students, int count);
 void delete_student(struct Student **students, int *count);
 void save_to_file(struct Student *students, int count);
 void load_from_file(struct Student **students, int *count, int *capacity);
+int get_integer_input();
 
 #endif // STUDENT_H // Include Guard 结束
