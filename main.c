@@ -16,6 +16,7 @@ int main() {
         printf("4. 按学号删除学生\n");
         printf("5. 存储数据\n");
         printf("6. 读取数据\n");
+        printf("7. 按学号排序\n");
         printf("0. 退出程序\n");
         printf("----------\n");
         printf("请输入你的选择: ");
@@ -43,6 +44,9 @@ int main() {
             break;
         case 6:
             load_from_file(&student_list, &student_count, &capacity);
+            break;
+        case 7:
+            sort_students_by_id(student_list, student_count);
             break;
         case 0:
             printf("感谢使用，再见！\n");

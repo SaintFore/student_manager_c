@@ -17,5 +17,7 @@ void delete_student(struct Student **students, int *count);
 void save_to_file(struct Student *students, int count);
 void load_from_file(struct Student **students, int *count, int *capacity);
 int get_integer_input();
+void sort_students_by_id(struct Student *students, int count);
+void sort_students_by_score(struct Student *students, int count);
 
 #endif // STUDENT_H // Include Guard 结束

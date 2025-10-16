@@ -5,6 +5,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+void clear_input_buffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF)
+        ;
+}
+
 // 添加学生的函数
 void add_student(struct Student **students, int *count, int *capacity) {
     if (*count == *capacity) {
@@ -165,5 +171,20 @@ int get_integer_input() {
             continue;
         }
         return (int)value;
+    }
+}
+
+void sort_students_by_id(struct Student *students, int count) {
+    if (count < 2) {
+        return;
+    }
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = 0; j < count - i - 1; j++) {
+            if (students[j].id > students[j + 1].id) {
+                struct Student tempId = students[i];
+                students[j] = students[j + 1];
+                students[j + 1] = tempId;
+            }
+        }
     }
 }
