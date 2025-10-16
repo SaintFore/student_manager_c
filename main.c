@@ -1,6 +1,21 @@
 // main.c
 #include "student.h"
 #include <stdlib.h>
+void display_menu() {
+
+    printf("\n--- 学生管理系统 ---\n");
+    printf("1. 添加学生\n");
+    printf("2. 显示所有学生\n");
+    printf("3. 按学号查找学生\n");
+    printf("4. 按学号删除学生\n");
+    printf("5. 存储数据\n");
+    printf("6. 读取数据\n");
+    printf("7. 按学号排序\n");
+    printf("8. 按成绩排序\n");
+    printf("0. 退出程序\n");
+    printf("----------\n");
+    printf("请输入你的选择: ");
+}
 
 int main() {
     struct Student *student_list = NULL;
@@ -8,18 +23,8 @@ int main() {
     int capacity = 0;
     int choice;
 
+    display_menu();
     while (1) {
-        printf("\n--- 学生管理系统 ---\n");
-        printf("1. 添加学生\n");
-        printf("2. 显示所有学生\n");
-        printf("3. 按学号查找学生\n");
-        printf("4. 按学号删除学生\n");
-        printf("5. 存储数据\n");
-        printf("6. 读取数据\n");
-        printf("7. 按学号排序\n");
-        printf("0. 退出程序\n");
-        printf("----------\n");
-        printf("请输入你的选择: ");
         choice = get_integer_input();
         printf("\n");
 
@@ -47,6 +52,9 @@ int main() {
             break;
         case 7:
             sort_students_by_id(student_list, student_count);
+            break;
+        case 8:
+            sort_students_by_score(student_list, student_count);
             break;
         case 0:
             printf("感谢使用，再见！\n");
