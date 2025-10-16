@@ -5,12 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-void clear_input_buffer() {
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF)
-        ;
-}
-
 // 添加学生的函数
 void add_student(struct Student **students, int *count, int *capacity) {
     if (*count == *capacity) {
@@ -27,10 +21,20 @@ void add_student(struct Student **students, int *count, int *capacity) {
     char name[50];
     int id;
     float score;
+    char buffer[100];
     // 提示用户输入...
     printf("请输入学生姓名，学号，成绩: \n");
+    if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
+        printf("输入错误\n");
+        return;
+    }
+    if (sscanf(buffer, "%49s %d %f", name, &id, &score) != 3) {
+        printf("输入格式错误");
+        return;
+    }
     // 使用 scanf 读取...
-    scanf("%s %d %f", name, &id, &score);
+    // 这个方法有缓冲区问题，会导致下面的gets读取到'\n'无法操作
+    /* scanf("%s %d %f", name, &id, &score); */
     // 存入数组...
     strcpy((*students)[*count].name, name);
     (*students)[*count].id = id;
